@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyNotes - Social Notes Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo" data-view="dashboard">
+                    <i class="fas fa-book"></i> MyNotes
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <a href="#" data-view="dashboard"><i class="fas fa-home"></i> Home</a>
+                    <a href="#" data-view="explore"><i class="fas fa-compass"></i> Explore</a>
+                    <a href="#" data-view="notifications" id="notificationsLink">
+                        <i class="fas fa-bell"></i> Notifications <span class="badge" id="notificationBadge">0</span>
+                    </a>
+                    <a href="#" data-view="bookmarks"><i class="fas fa-bookmark"></i> Bookmarks</a>
+                </div>
+                <div class="header-controls">
+                    <div class="theme-toggle">
+                        <input type="checkbox" id="themeToggle">
+                        <label for="themeToggle" class="theme-toggle-label">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                            <span class="theme-toggle-ball"></span>
+                        </label>
+                    </div>
+                    <div class="auth-buttons" id="authButtons">
+                        <button class="btn btn-outline" id="loginBtn">Login</button>
+                        <button class="btn" id="registerBtn">Register</button>
+                    </div>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <img src="" alt="User" class="user-avatar" id="userAvatar">
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="#" data-view="profile"><i class="fas fa-user"></i> Profile</a>
+                            <a href="#" data-view="settings"><i class="fas fa-cog"></i> Settings</a>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        </div>
+                    </div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" id="appContent">
+            <!-- Content will be loaded here -->
+        </div>
+    </main>
+
+    <button class="add-note-btn" id="addNoteBtn">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Auth Modals -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeLoginModal">&times;</button>
+            <div class="modal-body">
+                <h2>Login to MyNotes</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeRegisterModal">&times;</button>
+            <div class="modal-body">
+                <h2>Create New Account</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password (min 6 characters)</label>
+                        <input type="password" id="registerPassword" placeholder="Create password" minlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirm Password</label>
+                        <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerBio">Bio (Optional)</label>
+                        <textarea id="registerBio" rows="2" placeholder="Tell about yourself"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                </form>
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeNoteModal">&times;</button>
+            <div class="modal-body">
+                <h2 id="noteModalTitle">Create New Note</h2>
+                <form id="noteForm" enctype="multipart/form-data">
+                    <input type="hidden" id="noteId">
+                    <div class="form-group">
+                        <label for="noteTitle">Title</label>
+                        <input type="text" id="noteTitle" placeholder="Note title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteContent">Content</label>
+                        <textarea id="noteContent" rows="5" placeholder="Write your note here..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteImage">Image (Optional)</label>
+                        <input type="file" id="noteImage" accept="image/*">
+                        <div id="noteImagePreview" class="image-preview"></div>
+                        <button type="button" class="btn btn-outline btn-sm" id="removeImageBtn" style="display: none;">
+                            <i class="fas fa-trash"></i> Remove Image
+                        </button>
+                    </div>
+                    <div class="form-group form-checkbox">
+                        <input type="checkbox" id="noteIsPublic">
+                        <label for="noteIsPublic">Make this note public</label>
+                    </div>
+                    <button type="submit" class="btn" id="saveNoteBtn">Save Note</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Detail Modal -->
+    <div class="modal" id="noteDetailModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeNoteDetailModal">&times;</button>
+            <div class="modal-body">
+                <div class="note-detail-header">
+                    <div class="note-author">
+                        <img src="" alt="Author" id="noteDetailAuthorAvatar" class="note-author-avatar">
+                        <div>
+                            <h3 id="noteDetailAuthorName"></h3>
+                            <small id="noteDetailCreatedAt"></small>
+                        </div>
+                    </div>
+                    <div class="note-stats">
+                        <span class="note-stat" id="noteDetailViews"><i class="fas fa-eye"></i> <span>0</span></span>
+                        <span class="note-stat" id="noteDetailLikes"><i class="fas fa-heart"></i> <span>0</span></span>
+                    </div>
+                </div>
+                <h2 id="noteDetailTitle"></h2>
+                <div class="note-image-container" id="noteDetailImageContainer"></div>
+                <div class="note-content" id="noteDetailContent"></div>
+                <div class="note-actions" id="noteDetailActions">
+                    <button class="btn btn-outline" id="noteDetailLikeBtn"><i class="far fa-heart"></i> Like</button>
+                    <button class="btn btn-outline" id="noteDetailBookmarkBtn"><i class="far fa-bookmark"></i> Save</button>
+                    <button class="btn btn-outline" id="noteDetailShareBtn"><i class="fas fa-share"></i> Share</button>
+                    <button class="btn btn-outline" id="noteDetailEditBtn" style="display: none;"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn btn-outline" id="noteDetailDeleteBtn" style="display: none;"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+                <div class="comments-section">
+                    <h3>Comments</h3>
+                    <form id="commentForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <textarea id="commentContent" rows="2" placeholder="Write your comment..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Post Comment</button>
+                    </form>
+                    <div class="comments-list" id="commentsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeProfileModal">&times;</button>
+            <div class="modal-body">
+                <div class="profile-header">
+                    <img src="" alt="Profile" id="profileModalAvatar" class="profile-avatar">
+                    <div class="profile-info">
+                        <h2 id="profileModalName"></h2>
+                        <p id="profileModalBio"></p>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value" id="profileModalNotes">0</div>
+                                <div class="stat-label">Notes</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="profileModalFollowers">0</div>
+                                <div class="stat-label">Followers</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="profileModalFollowing">0</div>
+                                <div class="stat-label">Following</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions" id="profileModalActions">
+                    <button class="btn" id="profileModalFollowBtn">
+                        <i class="fas fa-user-plus"></i> Follow
+                    </button>
+                </div>
+                <div class="profile-public-notes">
+                    <h3>Public Notes</h3>
+                    <div class="notes-grid" id="profileModalNotesGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
