@@ -1,0 +1,24 @@
+{
+  "name": "mynotes-app",
+  "version": "3.0.0",
+  "description": "A social notes sharing platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "bcryptjs": "^2.4.3",
+    "multer": "^1.4.5-lts.1",
+    "express-rate-limit": "^6.7.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
